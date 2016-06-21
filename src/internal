@@ -1,0 +1,10 @@
+(ns cumulus.internal)
+
+
+(defn reqd
+  "Get required parameter k from map m. Throw exception if not found."
+  [m k]
+  (if (contains? m k)
+    (get m k)
+    (throw (IllegalArgumentException.
+             (format "Key %s not found in %s" (pr-str k) (pr-str m))))))
