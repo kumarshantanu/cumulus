@@ -1,6 +1,5 @@
 (ns cumulus.internal)
 
-
 (defn reqd
   "Get required parameter k from map m. Throw exception if not found."
   [m k]
@@ -20,3 +19,19 @@
     (when-not (pred found)
       (expected expectation found))))
 
+(defn typeCheck
+  [db-params key]
+  (if (not (integer? (get db-params key)))
+        ((throw (IllegalArgumentException. "Expected Integer")))))
+
+(defn typeCheck-string
+  [db-params key]
+  (if (not (string? (get db-params key)))
+        ((throw (IllegalArgumentException. "Expected String")))))
+
+(defn parse_fn
+  [db-params key]
+  (try 
+    (Integer/parseInt (get db-params key))
+    (catch NumberFormatException _
+      (throw (IllegalArgumentException.(format "Expected Integer string but found %s" (get db-params key)))))))
