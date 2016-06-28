@@ -22,12 +22,12 @@
 (defn typeCheck
   [db-params key]
   (if (not (integer? (get db-params key)))
-        ((throw (IllegalArgumentException. "Expected Integer")))))
+        ((throw (IllegalArgumentException. (format "Expected Integer but found %s" (get db-params key)))))))
 
 (defn typeCheck-string
   [db-params key]
   (if (not (string? (get db-params key)))
-        ((throw (IllegalArgumentException. "Expected String")))))
+        ((throw (IllegalArgumentException. (format "Expected String but found %s" (get db-params key)))))))
 
 (defn parse_fn
   [db-params key]
