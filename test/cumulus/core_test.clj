@@ -54,7 +54,7 @@
     (is (= {:classname
             "org.apache.derby.jdbc.EmbeddedDriver",
             :jdbc-url
-            "jdbc:derby://local3002/foo;create=true;",
+            "jdbc:derby://local:3002/foo;create=true;",
             :test-query "values(1)"}
         (jdbc-params :derby {:target :network
                              :host "local"
@@ -76,7 +76,8 @@
                           :database "foo"}))))
   (testing "h2-network"
     (is (= {:classname "org.h2.Driver",
-            :jdbc-url "jdbc:h2:tcp:local2030/foo",
+            :jdbc-url
+            "jdbc:h2:tcp:local:2030/foo",
             :test-query "SELECT 1"}
           (jdbc-params :h2 {:target :network 
                             :database "foo"
@@ -101,9 +102,10 @@
   (testing "hsqldb-network"
     (is (= {:classname "org.hsqldb.jdbcDriver",
             :jdbc-url
-            "jdbc:hsqldb:hsql://local2938/foo",
+            "jdbc:hsqldb:hsql://local:2938/foo",
             :test-query
             "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"}
+
           (jdbc-params :hsqldb {:target :network 
                                 :host "local"
                                 :port "2938"
@@ -249,7 +251,7 @@
     (is (= {:classname
             "oracle.jdbc.driver.OracleDriver",
             :jdbc-url
-            "jdbc:oracle:thin:@ldap://local/2937:foo",
+            "jdbc:oracle:thin:@ldap://local/:2937:foo",
             :test-query "SELECT 1 FROM DUAL"}
           (jdbc-params :oracle {:target :ldap
                                 :database "foo"
@@ -286,7 +288,7 @@
     (is (= {:classname
             "com.microsoft.sqlserver.jdbc.SQLServerDriver",
             :jdbc-url
-            "jdbc:sqlserver://local\\foo:1423",
+            "jdbc:sqlserver://:local:foo:1423",
             :test-query "SELECT 1"}
           (jdbc-params :sqlserver {:host "local"
                        :port "1423"
