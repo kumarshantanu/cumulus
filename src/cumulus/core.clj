@@ -12,6 +12,7 @@
    :jdbc-url   jdbc-url
    :test-query test-query})
 
+
 (defn jdbc-params
   "Given database-specific parameters, return a map of fundamental JDBC params consisting of
   the following mandatory keys (all of them having string values):
@@ -21,13 +22,13 @@
   [db-type db-params]
   
   (when-let [key (get db-params :port)]
-    (i/parse_fn db-params :port))
+    (i/type-check db-params :port))
   
   (when-let [key (get db-params :database)]
-   (i/typeCheck-string db-params :database))
+   (i/type-check-string db-params :database))
   
   (when-let [key (get db-params :host)]
-    (i/typeCheck-string db-params :host))
+    (i/type-check-string db-params :host))
   
   (let [R (partial i/reqd db-params)
         P (fn ([k] (get db-params k))
@@ -142,15 +143,15 @@
       
       :oracle          (raw-params
                          "oracle.jdbc.driver.OracleDriver"
-                         (let [target (:target db-params)]
-                           (case target
+                         (let [style (:style db-params)]
+                           (case style
                              :system-id    (format "jdbc:oracle:thin:@%s%s:%s"        (R :host) (Q :port) (R :database))
                              :service-name (format "jdbc:oracle:thin:@//%s%s/%s"      (R :host) (Q :port) (R :database))
                              :tns-name     (format "jdbc:oracle:thin:@%s"              (R :database))
                              :ldap         (format "jdbc:oracle:thin:@ldap://%s/%s:%s" (R :host) (Q :port) (R :database))
                              :oci          (format "jdbc:oracle:oci:@%s"               (R :database))
                              :oci8         (format "jdbc:oracle:oci8:@%s"              (R :database))
-                             (i/expected ":target to be :system-id, :service-name, :tns-name, :ldap,oci or :oci8" target)))
+                             (i/expected ":target to be :system-id, :service-name, :tns-name, :ldap,oci or :oci8" style)))
                          "SELECT 1 FROM DUAL")
       
       :sapdb           (raw-params
@@ -165,8 +166,10 @@
       
       :sybase          (raw-params
                          "com.sybase.jdbc2.jdbc.SybDriver"
-                         (format "jdbc:sybase:Tds:%s:%sServiceName=%s?"  (R :host) (Q :port) (Q :database))
-                         "SELECT 1")
+                         (if (get db-params :database)
+                               (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?"  (R :host) (Q :port) (Q :database))
+                               (format "jdbc:sybase:Tds:%s%s" (R :host) (Q :port)))
+                             "SELECT 1")
       
       (throw (IllegalArgumentException.
                (format "Database/adapter type %s is not supported" db-type))))))
