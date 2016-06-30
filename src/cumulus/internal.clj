@@ -19,19 +19,21 @@
     (when-not (pred found)
       (expected expectation found))))
 
-(defn typeCheck
+(defn type-check
   [db-params key]
   (if (not (integer? (get db-params key)))
-        ((throw (IllegalArgumentException. (format "Expected Integer but found %s" (get db-params key)))))))
+        ((throw (IllegalArgumentException. (format "Expected Integer but found %s" (pr-str (get db-params key))))))))
 
-(defn typeCheck-string
+(defn type-check-string
   [db-params key]
   (if (not (string? (get db-params key)))
-        ((throw (IllegalArgumentException. (format "Expected String but found %s" (get db-params key)))))))
+        ((throw (IllegalArgumentException. (format "Expected String but found %s" (pr-str (get db-params key))))))))
 
-(defn parse_fn
+(defn parse-fn
   [db-params key]
   (try 
     (Integer/parseInt (get db-params key))
     (catch NumberFormatException _
       (throw (IllegalArgumentException.(format "Expected Integer string but found %s" (get db-params key)))))))
+
+
