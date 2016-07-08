@@ -44,7 +44,6 @@
    :jdbc-url   jdbc-url
    :test-query test-query})
 
-;(def ^:dynamic *db-params* nil)
 (defn R 
   [m k]
   (reqd m k))
