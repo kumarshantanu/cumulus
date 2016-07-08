@@ -11,41 +11,40 @@
   :jdbc-url
   :test-query"
   
-  ([db-type db-params]
-    (when-let [key (get db-params :port)]
-      (i/type-check db-params :port))
+  [db-type db-params]
+  (when-let [key (get db-params :port)]
+    (i/type-check db-params :port))
+  
+  (when-let [key (get db-params :database)]
+    (i/type-check-string db-params :database))
+  
+  (when-let [key (get db-params :host)]
+    (i/type-check-string db-params :host))
+  
+  (binding [i/*db-params* db-params]
     
-    (when-let [key (get db-params :database)]
-      (i/type-check-string db-params :database))
-    
-    (when-let [key (get db-params :host)]
-      (i/type-check-string db-params :host))
-    
-    (binding [i/*db-params* db-params]
-      
-      (case db-type
-        ;;embedded
-        :odbc            (i/odbc db-params)
-        :axiondb         (i/axiondb db-params)
-        :derby           (i/derby db-params)
-        :h2              (i/h2 db-params)
-        :hsqldb          (i/hsqldb db-params)
-        :mckoi           (i/mckoi db-params)
-        :sqlite          (i/sqlite db-params)
-        ;; network OSS
-        :cubrid          (i/cubrid db-params)
-        :firebird        (i/firebird db-params)
-        :jtds-sqlserver  (i/jtds-sqlserver db-params)
-        :jtds-sybase     (i/jtds-sybase db-params)
-        :monetdb         (i/monetdb db-params)
-        :mysql           (i/mysql db-params)
-        :postgresql      (i/postgresql db-params)
-        ;; network proprietary
-        :db2             (i/db2 db-params)
-        :oracle          (i/oracle db-params)
-        :sapdb           (i/sapdb db-params)
-        :sqlserver       (i/sqlserver db-params)
-        :sybase          (i/sybase db-params)
-        (throw (IllegalArgumentException.
-                 (format "Database/adapter type %s is not supported" db-type)))))))
-
+    (case db-type
+      ;;embedded
+      :odbc            (i/odbc db-params)
+      :axiondb         (i/axiondb db-params)
+      :derby           (i/derby db-params)
+      :h2              (i/h2 db-params)
+      :hsqldb          (i/hsqldb db-params)
+      :mckoi           (i/mckoi db-params)
+      :sqlite          (i/sqlite db-params)
+      ;; network OSS
+      :cubrid          (i/cubrid db-params)
+      :firebird        (i/firebird db-params)
+      :jtds-sqlserver  (i/jtds-sqlserver db-params)
+      :jtds-sybase     (i/jtds-sybase db-params)
+      :monetdb         (i/monetdb db-params)
+      :mysql           (i/mysql db-params)
+      :postgresql      (i/postgresql db-params)
+      ;; network proprietary
+      :db2             (i/db2 db-params)
+      :oracle          (i/oracle db-params)
+      :sapdb           (i/sapdb db-params)
+      :sqlserver       (i/sqlserver db-params)
+      :sybase          (i/sybase db-params)
+      (throw (IllegalArgumentException.
+               (format "Database/adapter type %s is not supported" db-type))))))
