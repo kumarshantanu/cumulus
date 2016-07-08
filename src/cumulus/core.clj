@@ -20,9 +20,7 @@
   
   (when-let [key (get db-params :host)]
     (i/type-check-string db-params :host))
-  
-  (binding [i/*db-params* db-params]
-    
+
     (case db-type
       ;;embedded
       :odbc            (i/odbc db-params)
@@ -47,4 +45,4 @@
       :sqlserver       (i/sqlserver db-params)
       :sybase          (i/sybase db-params)
       (throw (IllegalArgumentException.
-               (format "Database/adapter type %s is not supported" db-type))))))
+               (format "Database/adapter type %s is not supported" db-type)))))
