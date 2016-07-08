@@ -8,7 +8,6 @@
     (throw (IllegalArgumentException.
              (format "Key %s not found in %s" (pr-str k) (pr-str m))))))
 
-
 (defn expected
   "Throw illegal input exception citing `expectation` and what was `found` did not match. Optionally accept a predicate
   fn to test `found` before throwing the exception."
@@ -65,27 +64,27 @@
     (str ":" (P k d))))
 
 (defn odbc
-  [m]
+  [*db-params*]
   (raw-params
     "sun.jdbc.odbc.JdbcOdbcDriver"
     (format "jdbc:odbc:%s"  (R :dsn))
     nil))
 
 (defn axiondb
-  [m]
+  [*db-params*]
   (raw-params 
     "org.axiondb.jdbc.AxionDriver"
-    (let [target (:target m)]
+    (let [target (:target *db-params*)]
       (case target
         :memory (format "jdbc:axiondb:%s"  (R :database))
         :filesys (format "jdbc:axiondb:%s:%s" (R :database) (R :db-path))))
     "SELECT 1"))
 
 (defn derby
-  [m]
+  [*db-params*]
   (raw-params 
     "org.apache.derby.jdbc.EmbeddedDriver"
-    (let [target (:target m)]
+    (let [target (:target *db-params*)]
       (case target
         :memory   (format "jdbc:derby:memory:%s;create=true;"     (R :database))
         :filesys   (format "jdbc:derby:directory:%s;create=true;" (R :database))
@@ -96,10 +95,10 @@
     "values(1)"))
 
 (defn h2
-  [m]
+  [*db-params*]
   (raw-params
     "org.h2.Driver"
-    (let [target (:target m)]
+    (let [target (:target *db-params*)]
       (case target 
         :memory  (format "jdbc:h2:mem:%s"             (R :database))
         :filesys (format "jdbc:h2:file:%s"            (R :database))
@@ -108,10 +107,10 @@
     "SELECT 1"))
 
 (defn hsqldb
-  [m]
+  [*db-params*]
   (raw-params 
     "org.hsqldb.jdbcDriver"
-    (let [target (:target m)]
+    (let [target (:target *db-params*)]
       (case target
         :memory  (format "jdbc:hsqldb:mem:%s"         (R :database))
         :filesys (format "jdbc:hsqldb:file:%s"        (R :database))
@@ -120,17 +119,17 @@
     "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"))
 
 (defn mckoi
-  [m]
+  [*db-params*]
   (raw-params 
     "com.mckoi.JDBCDriver"
     (format "jdbc:mckoi:local://%s"                   (R :database))
     "SELECT 1"))
 
 (defn sqlite
-  [m]
+  [*db-params*]
   (raw-params 
     "org.sqlite.JDBC"
-    (let [target (:target m)]
+    (let [target (:target *db-params*)]
       (case target 
         :memory  (format "jdbc:sqlite::memory:")
         :filesys (format "jdbc:sqlite:%s"             (R :database))
@@ -138,66 +137,66 @@
     "SELECT 1"))
 
 (defn cubrid
-  [m]
+  [*db-params*]
   (raw-params 
     "cubrid.jdbc.driver.CUBRIDDriver"
     (format "jdbc:cubrid:%s%s:%s"                 (R :host) (Q :port) (R :database))
     "SELECT 1;"))
 
 (defn firebird
-  [m]
+  [*db-params*]
   (raw-params
     "org.firebirdsql.jdbc.FBDriver"
     (format "jdbc:firebirdsql://%s%s/%s"          (R :host) (Q :port) (R :database))
     "SELECT CAST(1 AS INTEGER) FROM rdb$database;"))
 
 (defn jtds-sqlserver
-  [m]
+  [*db-params*]
   (raw-params
     "net.sourceforge.jtds.jdbc.Driver"
     (format "jdbc:jtds:sqlserver://%s%s%s"        (R :host) (Q :port) (R :database))
     "select 1;"))
 
 (defn jtds-sybase
-  [m]
+  [*db-params*]
   (raw-params 
     "net.sourceforge.jtds.jdbc.Driver"
     (format "jdbc:jtds:sybase://%s%s%s"           (R :host) (Q :port) (R :database))
     "select 1;"))
 
 (defn monetdb
-  [& m]
+  [*db-params*]
   (raw-params
     "nl.cwi.monetdb.jdbc.MonetDriver"
     (format "jdbc:monetdb://%s%s/%s"              (R :host) (Q :port) (R :database))
     "SELECT 1;"))
 
 (defn mysql
-  [m]
+  [*db-params*]
   (raw-params 
     "com.mysql.jdbc.Driver"
     (format "jdbc:mysql://%s%s/%s"                (R :host) (Q :port) (R :database))
     "SELECT 1;"))
 
 (defn postgresql
-  [m]
+  [*db-params*]
   (raw-params 
     "org.postgresql.Driver"
     (format "jdbc:postgresql://%s%s/%s"           (R :host) (Q :port) (R :database))
     "SELECT version();"))
 
 (defn db2
-  [m]
+  [*db-params*]
   (raw-params 
     "com.ibm.db2.jcc.DB2Driver"
     (format "jdbc:db2://%s%s/%s"                  (R :host) (Q :port) (R :database))
     "select * from sysibm.SYSDUMMY1;"))
 
 (defn oracle 
-  [m]
+  [*db-params*]
   (raw-params
     "oracle.jdbc.driver.OracleDriver"
-    (let [style (:style m)]
+    (let [style (:style *db-params*)]
       (case style
         :system-id    (format "jdbc:oracle:thin:@%s%s:%s"        (R :host) (Q :port) (R :database))
         :service-name (format "jdbc:oracle:thin:@//%s%s/%s"      (R :host) (Q :port) (R :database))
@@ -209,24 +208,24 @@
                          "SELECT 1 FROM DUAL"))
 
 (defn sapdb
-  [m]
+  [*db-params*]
   (raw-params
     "com.sap.dbtech.jdbc.DriverSapDB"
     (format "jdbc:sapdb://%s%s/%s"                 (R :host) (Q :port) (R :database))
     "SELECT 1 FROM DUAL"))
 
 (defn sqlserver
-  [m]
+  [*db-params*]
   (raw-params
     "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     (format "jdbc:sqlserver://%s%s%s"            (Q :host) (Q :instance) (Q :port))
     "SELECT 1"))
 
 (defn sybase 
-  [m]
+  [*db-params*]
   (raw-params
     "com.sybase.jdbc2.jdbc.SybDriver"
-    (if (get m :database)
+    (if (get *db-params* :database)
       (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?"  (R :host) (Q :port) (Q :database))
       (format "jdbc:sybase:Tds:%s%s" (R :host) (Q :port)))
     "SELECT 1"))
