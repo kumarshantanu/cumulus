@@ -2,7 +2,6 @@
   (:require [clojure.test :refer :all]
     [cumulus.core :refer :all]))
 
-"ODBC"
 (deftest test-odbc
   (testing "ODBC-required"
     (is (= {:classname
@@ -18,7 +17,6 @@
     "The required keys are not specified"))
 
 
-"Axiondb"
 (deftest test-axiondb
   "axiondb-memory"
   (testing "axiondb-memory-reqd"
@@ -64,7 +62,6 @@
     "Axiondb-target-filesys, all the required keys are not specified (only db-path is specified)"))
 
 
-"Derby"
 (deftest test-derby
   "derby-memory"
   (testing "derby-memory-reqd"
@@ -134,7 +131,7 @@
           (jdbc-params :derby {:target :jar 
                                :jar-path "c:/u"}))
       "Derby-target-jar,all the required keys are not specified (only jar-path is specified)"))
-    
+  
   (testing "derby-jar-without-reqd-database"
     (is (thrown? IllegalArgumentException
           (jdbc-params :derby {:target :jar 
@@ -182,7 +179,7 @@
                                :host "local"
                                :port 123}))
       "Derby-target-network,all the required keys are not specified (only host and port are specified)"))
-    
+  
   (testing "derby-network-without-reqd-database"
     (is (thrown? IllegalArgumentException
           (jdbc-params :derby {:target :network 
@@ -203,7 +200,6 @@
     "Derby-target-network,all the required keys are not specified (only port is specified)"))
 
 
-"H2"
 (deftest test-h2
   "h2-memory"
   (testing "h2-memory-reqd"
@@ -257,7 +253,7 @@
     (is (thrown? IllegalArgumentException
           (jdbc-params :h2 {:target :network}))
       "h2-target-network,the required keys are not specified"))
-    
+  
   (testing "h2-notwork-without-reqd-port"
     (is (thrown? IllegalArgumentException
           (jdbc-params :h2 {:target :network 
@@ -273,22 +269,22 @@
   (testing "h2--network-without-reqd-host"
     (is (thrown? IllegalArgumentException
           (jdbc-params :h2 {:target :network 
-                     :host "local"}))
+                            :host "local"}))
       "h2-target-network,all the required keys are not specified (only host is specified)"))
   
-    (testing "h2-network-without-reqd-host and port"
-      (is (thrown? IllegalArgumentException
-            (jdbc-params :h2 {:target :network 
-                              :host "local"
-                              :port 2342}))
-        "h2-target-network,all the required keys are not specified (only host and port are specified)"))
-    
-    (testing "h2-network-without-reqd-database and port"
-      (is (thrown? IllegalArgumentException
-            (jdbc-params :h2 {:target :network 
-                              :database "foo"
-                              :port 2334}))
-        "h2-target-network,all the required keys are not specified (only database and port are specified)")))
+  (testing "h2-network-without-reqd-host and port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :h2 {:target :network 
+                            :host "local"
+                            :port 2342}))
+      "h2-target-network,all the required keys are not specified (only host and port are specified)"))
+  
+  (testing "h2-network-without-reqd-database and port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :h2 {:target :network 
+                            :database "foo"
+                            :port 2334}))
+      "h2-target-network,all the required keys are not specified (only database and port are specified)")))
 
 
 (deftest test-hsqldb
@@ -384,7 +380,6 @@
     "hsqldb-target-network,all the required keys are not specified (only port and database are specified)"))
 
 
-"mckoi"
 (deftest test-mckoi
   (testing "mckoi"
     (is (= {:classname "com.mckoi.JDBCDriver",
@@ -398,7 +393,7 @@
           (jdbc-params :mckoi {})))
     "The required parameters aren't specified"))
 
-"sqlite"
+
 (deftest test-sqlite
   "sqlite-memory"
   (testing "sqlite-memory"
@@ -423,7 +418,6 @@
       "sqlite-target-filesys,the required keys are not specified")))
 
 
-"cubrid"
 (deftest test-cubrid
   (testing "cubrid-reqd"
     (is (={:classname
@@ -476,7 +470,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"firebird"
 (deftest test-firebird
   (testing "firebird-reqd-only"
     (is (={:classname
@@ -531,7 +524,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"jtds-sqlserver"
 (deftest test-jtds-sqlserver
   (testing "jtds-sqlserver-reqd-only"
     (is (={:classname
@@ -586,7 +578,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"jtds-sybase"
 (deftest test-jtds-sybase
   (testing "jtds-sybase-reqd"
     (is (={:classname
@@ -595,7 +586,7 @@
            "jdbc:jtds:sybase://localfoo",
            :test-query "select 1;"}
           (jdbc-params :jtds-sybase {:host "local" :database "foo"}))
-       "The required keys are specified"))
+      "The required keys are specified"))
   
   (testing "jtds-sybase"
     (is (= {:classname
@@ -608,11 +599,11 @@
                                      :database "foo"}))
       "All the required and optional keys are specifed"))
   
-   (testing "jtds-sybase-without-reqd-none"
+  (testing "jtds-sybase-without-reqd-none"
     (is (thrown? IllegalArgumentException
           (jdbc-params :jtds-sybase {}))
       "None of the required or optional parameters are specified"))
-   
+  
   (testing "jjtds-sybase-without-reqd-port"
     (is (thrown? IllegalArgumentException
           (jdbc-params :jtds-sybase {:port 1334}))
@@ -637,10 +628,10 @@
   (testing "jtds-sybase-without-reqd-database & port"
     (is (thrown? IllegalArgumentException
           (jdbc-params :jtds-sybase {:database "foo"
-                         :port 23890}))
+                                     :port 23890}))
       "all the required keys are not specified (only port and database are specified)")))
 
-"monetdb"
+
 (deftest test-monetdb
   (testing "monetdb-reqd"
     (is (={:classname
@@ -694,7 +685,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"my-sql"
 (deftest test-mysql
   (testing "mysql-reqd"
     (is (={:classname "com.mysql.jdbc.Driver",
@@ -745,7 +735,7 @@
                                :port 23890}))
       "all the required keys are not specified (only port and database are specified)")))
 
-"postgresql"
+
 (deftest test-postgresql
   (testing "postgresql-reqd"
     (is (={:classname "org.postgresql.Driver",
@@ -798,7 +788,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"oracle"
 (deftest test-oracle
   "system-id"
   (testing "oracle-system-id-reqd"
@@ -1027,7 +1016,6 @@
       "None of the keys are specified")))
 
 
-"db2"
 (deftest test-db2
   (testing "db2-reqd"
     (is (={:classname
@@ -1049,16 +1037,16 @@
                              :database "foo"}))
       "All the required and optional parameters are specifed"))
   
-   (testing "db2-without-reqd-none"
-     (is (thrown? IllegalArgumentException
-           (jdbc-params :db2 {}))
-       "None of the required or optional parameters are specified"))
+  (testing "db2-without-reqd-none"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :db2 {}))
+      "None of the required or optional parameters are specified"))
    
-   (testing "db2-without-reqd-port"
-     (is (thrown? IllegalArgumentException
-           (jdbc-params :db2 {:port 1334}))
-       "all the required keys are not specified (only port is specified)"))
-   
+  (testing "db2-without-reqd-port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :db2 {:port 1334}))
+      "all the required keys are not specified (only port is specified)"))
+  
   (testing "db2-without-reqd-host"
     (is (thrown? IllegalArgumentException
           (jdbc-params :db2 {:host "local"}))
@@ -1082,7 +1070,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"sapdb"
 (deftest test-sapdb
   (testing "sapdb-reqd-only"
     (is (={:classname
@@ -1135,7 +1122,6 @@
       "all the required keys are not specified (only port and database are specified)")))
 
 
-"sqlserver"
 (deftest test-sqlserver
   (testing "sqlserver-opt"
     (is (= {:classname
@@ -1211,7 +1197,6 @@
       "Only one optional key (port) is specified")))
 
 
-"sybase"
 (deftest test-sybase
   (testing "sybase-reqd"
     (is (={:classname
