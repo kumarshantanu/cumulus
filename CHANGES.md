@@ -3,9 +3,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- [TODO] Support for in-memory databases
-  - [TODO] List the names
-- [TODO] Support for filesystem databases
-  - [TODO] List the names
-- [TODO] Support for network databases
-  - [TODO] List the names
+## Support for in-memory databases
+  * Axion
+  * Derby
+  * H2
+  * HSQLDB
+  * SQLite
+  
+## Support for filesystem databases
+  * Axion
+  * Derby
+  * H2
+  * HSQLDB
+  * SQLite
+  * 
+## Support for network databases
+  * Derby
+  * H2
+  * HSQLDB
