@@ -84,20 +84,31 @@
     (str ":" (P m k d))))
 
 
+(defn assert-as
+  "Assert the validity of x using predicate f, returning x on success or throw IllegalArgumentException on failure."
+  [f description x]
+  (expected f description x)
+  x)
+
+
 (defn jdbc
   [m]
   (merge m (raw-params
-             (format (R m :classname))
-             (as-str (R m :jdbc-url))
-             nil)))
+             (assert-as string? ":classname as string" (R m :classname))
+             (assert-as string? ":classname as string" (R m :jdbc-url))
+             (if (not :test-query)
+               nil
+               (get m :test-query)))))
 
 
 (defn subprotocol
   [m]
   (merge m (raw-params
-             (format (R m :classname))
+             (assert-as string? (R m :classname))
              (format "jdbc:%s:%s" (as-str (R m :subprotocol)) (as-str (R m :subname)))
-             nil)))
+             (if (not :test-query)
+               nil
+               (get m :test-query)))))
 
 
 (defn odbc
@@ -105,7 +116,9 @@
   (merge m (raw-params
              "sun.jdbc.odbc.JdbcOdbcDriver"
              (format "jdbc:odbc:%s" (as-str (R m :dsn)))
-             nil)))
+             (if (not :test-query)
+               nil
+               (get m :test-query)))))
 
 
 (defn odbc-lite 
@@ -265,8 +278,8 @@
              "oracle.jdbc.driver.OracleDriver"
              (let [style (:style m)]
                (case style
-                 :system-id    (format "jdbc:oracle:thin:@%s%s:%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
-                 :service-name (format "jdbc:oracle:thin:@//%s%s/%s"      (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+                 :system-id    (format "jdbc:oracle:thin:@%s%s:%s"         (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+                 :service-name (format "jdbc:oracle:thin:@//%s%s/%s"       (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
                  :tns-name     (format "jdbc:oracle:thin:@%s"              (as-str (R m :database)))
                  :ldap         (format "jdbc:oracle:thin:@ldap://%s/%s:%s" (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
                  :oci          (format "jdbc:oracle:oci:@%s"               (as-str (R m :database)))
