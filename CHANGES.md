@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## Released
 
 ## Support for in-memory databases
   * Axion
@@ -21,3 +21,15 @@ All notable changes to this project will be documented in this file.
   * Derby
   * H2
   * HSQLDB
+  * CUBRID
+  * Firebird
+  * SQL Server (jTDS)
+  * Sybase (jTDS)	
+  * MonetDB	
+  * MySQL	
+  * PostgreSQL
+  * Oracle
+  * IBM DB2	
+  * SapDB
+  * SQL Server
+  * Sybase
