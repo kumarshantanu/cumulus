@@ -39,6 +39,7 @@
       :monetdb         (i/monetdb db-params)
       :mysql           (i/mysql db-params)
       :postgresql      (i/postgresql db-params)
+      :pgsql           (i/pgsql db-params)
       ;; network proprietary
       :db2             (i/db2 db-params)
       :oracle          (i/oracle db-params)
