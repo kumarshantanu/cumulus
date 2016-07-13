@@ -244,6 +244,14 @@
              "SELECT version();")))
 
 
+(defn pgsql
+  [m]
+  (merge m (raw-params
+             "com.impossibl.postgres.jdbc.PGDriver"
+             (format "jdbc:pgsql://%s%s/%s" (R m :host) (Q m :port) (R m :database))
+             "SELECT version();")))
+
+
 (defn db2
   [m]
   (merge m (raw-params
