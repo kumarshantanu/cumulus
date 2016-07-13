@@ -121,7 +121,7 @@
              "org.axiondb.jdbc.AxionDriver"
              (let [target (:target m)]
                (case target
-                 :memory (format "jdbc:axiondb:%s"  (as-str (R m :database)))
+                 :memory (format "jdbc:axiondb:%s"     (as-str (R m :database)))
                  :filesys (format "jdbc:axiondb:%s:%s" (as-str (R m :database))  (as-str (R m :db-path)))))
              "SELECT 1")))
 
@@ -191,7 +191,7 @@
   [m]
   (merge m (raw-params
              "cubrid.jdbc.driver.CUBRIDDriver"
-             (format "jdbc:cubrid:%s%s:%s"                 (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:cubrid:%s%s:%s"                     (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -199,7 +199,7 @@
   [m]
   (merge m (raw-params
              "org.firebirdsql.jdbc.FBDriver"
-             (format "jdbc:firebirdsql://%s%s/%s"          (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:firebirdsql://%s%s/%s"              (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT CAST(1 AS INTEGER) FROM rdb$database;")))
 
 
@@ -207,7 +207,7 @@
   [m]
   (merge m (raw-params
              "net.sourceforge.jtds.jdbc.Driver"
-             (format "jdbc:jtds:sqlserver://%s%s%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:jtds:sqlserver://%s%s%s"            (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select 1;")))
 
 
@@ -215,7 +215,7 @@
   [m]
   (merge m (raw-params 
              "net.sourceforge.jtds.jdbc.Driver"
-             (format "jdbc:jtds:sybase://%s%s%s"           (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:jtds:sybase://%s%s%s"               (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select 1;")))
 
 
@@ -223,7 +223,7 @@
   [m]
   (merge m (raw-params
              "nl.cwi.monetdb.jdbc.MonetDriver"
-             (format "jdbc:monetdb://%s%s/%s"              (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:monetdb://%s%s/%s"                  (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -231,7 +231,7 @@
   [m]
   (merge m (raw-params
              "com.mysql.jdbc.Driver"
-             (format "jdbc:mysql://%s%s/%s"                (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:mysql://%s%s/%s"                    (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -239,7 +239,7 @@
   [m]
   (merge m (raw-params
              "org.postgresql.Driver"
-             (format "jdbc:postgresql://%s%s/%s"           (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:postgresql://%s%s/%s"               (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT version();")))
 
 
@@ -247,7 +247,7 @@
   [m]
   (merge m (raw-params
              "com.impossibl.postgres.jdbc.PGDriver"
-             (format "jdbc:pgsql://%s%s/%s"                (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:pgsql://%s%s/%s"                    (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT version();")))
 
 
@@ -255,7 +255,7 @@
   [m]
   (merge m (raw-params
              "com.ibm.db2.jcc.DB2Driver"
-             (format "jdbc:db2://%s%s/%s"                  (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:db2://%s%s/%s"                      (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select * from sysibm.SYSDUMMY1;")))
 
 
@@ -279,7 +279,7 @@
   [m]
   (merge m (raw-params
              "com.sap.dbtech.jdbc.DriverSapDB"
-             (format "jdbc:sapdb://%s%s/%s"                 (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+             (format "jdbc:sapdb://%s%s/%s"                    (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1 FROM DUAL")))
 
 
@@ -287,7 +287,7 @@
   [m]
   (merge m (raw-params
              "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-             (format "jdbc:sqlserver://%s%s%s"            (as-str (Q m :host)) (as-str (Q m :instance)) (Q m :port))
+             (format "jdbc:sqlserver://%s%s%s"                (as-str (Q m :host)) (as-str (Q m :instance)) (Q m :port))
              "SELECT 1")))
 
 
@@ -296,6 +296,6 @@
   (merge m (raw-params
              "com.sybase.jdbc2.jdbc.SybDriver"
              (if (get m :database)
-               (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?"  (as-str (R m :host)) (Q m :port) (as-str (Q m :database)))
-               (format "jdbc:sybase:Tds:%s%s" (as-str (R m :host)) (Q m :port)))
+               (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?" (as-str (R m :host)) (Q m :port) (as-str (Q m :database)))
+               (format "jdbc:sybase:Tds:%s%s"                 (as-str (R m :host)) (Q m :port)))
              "SELECT 1")))
