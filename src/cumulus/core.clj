@@ -7,14 +7,14 @@
 (defn jdbc-params
   "Given database-specific parameters, return a map of fundamental JDBC params consisting of
   the following mandatory keys (all of them having string values):
-  :driver-class (fully qualified class name)
+  :classname (fully qualified class name)
   :jdbc-url
   :test-query"
   ([db-params]
     (jdbc-params (:adapter db-params) db-params))
   ([db-type db-params]
     (when-let [key (get db-params :port)]
-      (i/type-check db-params :port))
+      (i/type-check-int db-params :port))
     (when-let [key (get db-params :database)]
       (i/type-check-string db-params :database))
     (when-let [key (get db-params :host)]

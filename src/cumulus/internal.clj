@@ -7,8 +7,7 @@
   "Get required parameter k from map m. Throw exception if not found."
   [m k]
   (if (contains? m k)
-    (name (get m k))
-    ;(get m k)
+    (get m k)
     (throw (IllegalArgumentException.
              (format "Key %s not found in %s" (pr-str k) (pr-str m))))))
 
@@ -32,7 +31,7 @@
     (str x)))
 
 
-(defn type-check
+(defn type-check-int
   [db-params key]
   (if (not (integer? (get db-params key)))
     ((throw (IllegalArgumentException. (format "Expected Integer but found %s" (pr-str (get db-params key))))))))
@@ -88,16 +87,16 @@
 (defn jdbc
   [m]
   (merge m (raw-params
-             (format "%s" (R m :classname))
-             (format "%s" (R m :jdbc-url))
+             (format (R m :classname))
+             (as-str (R m :jdbc-url))
              nil)))
 
 
 (defn subprotocol
   [m]
   (merge m (raw-params
-             (format "%s" (R m :classname))
-             (format "jdbc:%s:%s" (R m :subprotocol) (R m :subname))
+             (format (R m :classname))
+             (format "jdbc:%s:%s" (as-str (R m :subprotocol)) (as-str (R m :subname)))
              nil)))
 
 
@@ -105,14 +104,14 @@
   [m]
   (merge m (raw-params
              "sun.jdbc.odbc.JdbcOdbcDriver"
-             (format "jdbc:odbc:%s"  (R m :dsn))
+             (format "jdbc:odbc:%s" (as-str (R m :dsn)))
              nil)))
 
 
 (defn odbc-lite 
   [m]
   {:classname "sun.jdbc.odbc.JdbcOdbcDriver"
-   :jdbc-url  (format "jdbc:odbc:%s" (R m :dsn))
+   :jdbc-url  (format "jdbc:odbc:%s" (as-str (R m :dsn)))
    :lite?     true})
 
 
@@ -122,8 +121,8 @@
              "org.axiondb.jdbc.AxionDriver"
              (let [target (:target m)]
                (case target
-                 :memory (format "jdbc:axiondb:%s"  (R m :database))
-                 :filesys (format "jdbc:axiondb:%s:%s" (R m :database) (R m :db-path))))
+                 :memory (format "jdbc:axiondb:%s"  (as-str (R m :database)))
+                 :filesys (format "jdbc:axiondb:%s:%s" (as-str (R m :database))  (as-str (R m :db-path)))))
              "SELECT 1")))
 
 
@@ -133,11 +132,11 @@
              "org.apache.derby.jdbc.EmbeddedDriver"
              (let [target (:target m)]
                (case target
-                 :memory   (format "jdbc:derby:memory:%s;create=true;"     (R m :database))
-                 :filesys   (format "jdbc:derby:directory:%s;create=true;" (R m :database))
-                 :classpath (format "jdbc:derby:classpath:%s"              (R m :database))
-                 :jar       (format "jdbc:derby:jar:(%s)%s"                (R m :jar-path) (R m :database))
-                 :network   (format "jdbc:derby://%s%s/%s;create=true;"    (R m :host) (Q m :port) (R m :database))
+                 :memory   (format "jdbc:derby:memory:%s;create=true;"     (as-str (R m :database)))
+                 :filesys   (format "jdbc:derby:directory:%s;create=true;" (as-str (R m :database)))
+                 :classpath (format "jdbc:derby:classpath:%s"              (as-str (R m :database)))
+                 :jar       (format "jdbc:derby:jar:(%s)%s"                (as-str (R m :jar-path)) (as-str (R m :database)))
+                 :network   (format "jdbc:derby://%s%s/%s;create=true;"    (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
                  (expected ":target to be :memory, :filesys, :classpath, :jar or :network" target)))
              "values(1)")))
 
@@ -148,9 +147,9 @@
              "org.h2.Driver"
              (let [target (:target m)]
                (case target 
-                 :memory  (format "jdbc:h2:mem:%s"             (R m :database))
-                 :filesys (format "jdbc:h2:file:%s"            (R m :database))
-                 :network (format "jdbc:h2:tcp:%s%s/%s"        (R m :host) (Q m :port) (R m :database))
+                 :memory  (format "jdbc:h2:mem:%s"             (as-str (R m :database)))
+                 :filesys (format "jdbc:h2:file:%s"            (as-str (R m :database)))
+                 :network (format "jdbc:h2:tcp:%s%s/%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
                  (expected ":target to be :memory, :filesys or :network" target)))
              "SELECT 1")))
 
@@ -161,9 +160,9 @@
              "org.hsqldb.jdbcDriver"
              (let [target (:target m)]
                (case target
-                 :memory  (format "jdbc:hsqldb:mem:%s"         (R m :database))
-                 :filesys (format "jdbc:hsqldb:file:%s"        (R m :database))
-                 :network (format "jdbc:hsqldb:hsql://%s%s/%s" (R m :host) (Q m :port) (R m :database))
+                 :memory  (format "jdbc:hsqldb:mem:%s"         (as-str (R m :database)))
+                 :filesys (format "jdbc:hsqldb:file:%s"        (as-str (R m :database)))
+                 :network (format "jdbc:hsqldb:hsql://%s%s/%s" (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
                  (expected ":target to be :memory, :filesys or :network" target)))
              "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS")))
 
@@ -172,7 +171,7 @@
   [m]
   (merge m (raw-params
              "com.mckoi.JDBCDriver"
-             (format "jdbc:mckoi:local://%s"                   (R m :database))
+             (format "jdbc:mckoi:local://%s"                   (as-str (R m :database)))
              "SELECT 1")))
 
 
@@ -183,7 +182,7 @@
              (let [target (:target m)]
                (case target
                  :memory  (format "jdbc:sqlite::memory:")
-                 :filesys (format "jdbc:sqlite:%s"             (R m :database))
+                 :filesys (format "jdbc:sqlite:%s"             (as-str (R m :database)))
                  (expected ":target to be :memory or :filesys" target)))
              "SELECT 1")))
 
@@ -192,7 +191,7 @@
   [m]
   (merge m (raw-params
              "cubrid.jdbc.driver.CUBRIDDriver"
-             (format "jdbc:cubrid:%s%s:%s"                 (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:cubrid:%s%s:%s"                 (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -200,7 +199,7 @@
   [m]
   (merge m (raw-params
              "org.firebirdsql.jdbc.FBDriver"
-             (format "jdbc:firebirdsql://%s%s/%s"          (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:firebirdsql://%s%s/%s"          (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT CAST(1 AS INTEGER) FROM rdb$database;")))
 
 
@@ -208,7 +207,7 @@
   [m]
   (merge m (raw-params
              "net.sourceforge.jtds.jdbc.Driver"
-             (format "jdbc:jtds:sqlserver://%s%s%s"        (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:jtds:sqlserver://%s%s%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select 1;")))
 
 
@@ -216,7 +215,7 @@
   [m]
   (merge m (raw-params 
              "net.sourceforge.jtds.jdbc.Driver"
-             (format "jdbc:jtds:sybase://%s%s%s"           (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:jtds:sybase://%s%s%s"           (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select 1;")))
 
 
@@ -224,7 +223,7 @@
   [m]
   (merge m (raw-params
              "nl.cwi.monetdb.jdbc.MonetDriver"
-             (format "jdbc:monetdb://%s%s/%s"              (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:monetdb://%s%s/%s"              (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -232,7 +231,7 @@
   [m]
   (merge m (raw-params
              "com.mysql.jdbc.Driver"
-             (format "jdbc:mysql://%s%s/%s"                (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:mysql://%s%s/%s"                (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1;")))
 
 
@@ -240,7 +239,7 @@
   [m]
   (merge m (raw-params
              "org.postgresql.Driver"
-             (format "jdbc:postgresql://%s%s/%s"           (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:postgresql://%s%s/%s"           (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT version();")))
 
 
@@ -248,7 +247,7 @@
   [m]
   (merge m (raw-params
              "com.impossibl.postgres.jdbc.PGDriver"
-             (format "jdbc:pgsql://%s%s/%s" (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:pgsql://%s%s/%s"                (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT version();")))
 
 
@@ -256,7 +255,7 @@
   [m]
   (merge m (raw-params
              "com.ibm.db2.jcc.DB2Driver"
-             (format "jdbc:db2://%s%s/%s"                  (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:db2://%s%s/%s"                  (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select * from sysibm.SYSDUMMY1;")))
 
 
@@ -266,12 +265,12 @@
              "oracle.jdbc.driver.OracleDriver"
              (let [style (:style m)]
                (case style
-                 :system-id    (format "jdbc:oracle:thin:@%s%s:%s"        (R m :host) (Q m :port) (R m :database))
-                 :service-name (format "jdbc:oracle:thin:@//%s%s/%s"      (R m :host) (Q m :port) (R m :database))
-                 :tns-name     (format "jdbc:oracle:thin:@%s"              (R m :database))
-                 :ldap         (format "jdbc:oracle:thin:@ldap://%s/%s:%s" (R m :host) (Q m :port) (R m :database))
-                 :oci          (format "jdbc:oracle:oci:@%s"               (R m :database))
-                 :oci8         (format "jdbc:oracle:oci8:@%s"              (R m :database))
+                 :system-id    (format "jdbc:oracle:thin:@%s%s:%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+                 :service-name (format "jdbc:oracle:thin:@//%s%s/%s"      (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+                 :tns-name     (format "jdbc:oracle:thin:@%s"              (as-str (R m :database)))
+                 :ldap         (format "jdbc:oracle:thin:@ldap://%s/%s:%s" (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
+                 :oci          (format "jdbc:oracle:oci:@%s"               (as-str (R m :database)))
+                 :oci8         (format "jdbc:oracle:oci8:@%s"              (as-str (R m :database)))
                  (expected ":target to be :system-id, :service-name, :tns-name, :ldap,oci or :oci8" style)))
              "SELECT 1 FROM DUAL")))
 
@@ -280,7 +279,7 @@
   [m]
   (merge m (raw-params
              "com.sap.dbtech.jdbc.DriverSapDB"
-             (format "jdbc:sapdb://%s%s/%s"                 (R m :host) (Q m :port) (R m :database))
+             (format "jdbc:sapdb://%s%s/%s"                 (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "SELECT 1 FROM DUAL")))
 
 
@@ -288,7 +287,7 @@
   [m]
   (merge m (raw-params
              "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-             (format "jdbc:sqlserver://%s%s%s"            (Q m :host) (Q m :instance) (Q m :port))
+             (format "jdbc:sqlserver://%s%s%s"            (as-str (Q m :host)) (as-str (Q m :instance)) (Q m :port))
              "SELECT 1")))
 
 
@@ -297,6 +296,6 @@
   (merge m (raw-params
              "com.sybase.jdbc2.jdbc.SybDriver"
              (if (get m :database)
-               (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?"  (R m :host) (Q m :port) (Q m :database))
-               (format "jdbc:sybase:Tds:%s%s" (R m :host) (Q m :port)))
+               (format "jdbc:sybase:Tds:%s%s?ServiceName=%s?"  (as-str (R m :host)) (Q m :port) (as-str (Q m :database)))
+               (format "jdbc:sybase:Tds:%s%s" (as-str (R m :host)) (Q m :port)))
              "SELECT 1")))
