@@ -17,6 +17,10 @@ _Not on Clojars yet. Build locally and run `lein install`._
 
 ;; MySQL connection params
 (c/jdbc-params :mysql {:host "localhost"
+<<<<<<< HEAD
+=======
+                       :port 3020
+>>>>>>> b4d50413030030f1409ec7588d56bf2f78047999
                        :database "foo"
                        :username "dbuser"
                        :password "s3cr3t"})
