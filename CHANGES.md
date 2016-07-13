@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   * H2
   * HSQLDB
   * SQLite
-  * 
+  
 ## Support for network databases
   * Derby
   * H2
