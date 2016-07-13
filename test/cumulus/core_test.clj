@@ -774,9 +774,9 @@
   (testing "mysql-reqd and opt"
     (is (= {:test-query "SELECT 1;",
             :jdbc-url
-            "jdbc:mysql://localhost :1332/foo",
+            "jdbc:mysql://localhost:1332/foo",
             :classname "com.mysql.jdbc.Driver",
-            :host "localhost ",
+            :host "localhost",
             :database "foo",
             :port 1332}
           (jdbc-params :mysql {:host "localhost"
@@ -871,6 +871,64 @@
     (is (thrown? IllegalArgumentException
           (jdbc-params :postgresql {:database "foo"
                                     :port 23890}))
+      "all the required keys are not specified (only port and database are specified)")))
+
+
+(deftest test-pgsql
+  (testing "pgsql-reqd"
+    (is (={:test-query "SELECT version();",
+           :jdbc-url "jdbc:pgsql://local/foo",
+           :classname
+           "com.impossibl.postgres.jdbc.PGDriver",
+           :host "local",
+           :database "foo"}
+          (jdbc-params :pgsql {:host "local" :database "foo"}))
+      "The required parameters are specified"))
+  
+  (testing "pgsql-reqd and opt"
+    (is (= {:test-query "SELECT version();",
+            :jdbc-url
+            "jdbc:pgsql://localhost:1345/foo",
+            :classname
+            "com.impossibl.postgres.jdbc.PGDriver",
+            :host "localhost",
+            :database "foo",
+            :port 1345}
+          (jdbc-params :pgsql {:host "localhost"
+                               :port 1345
+                               :database "foo"}))
+      "All the required and optional parameters are specifed"))
+  
+  (testing "pgsql-without-reqd-none"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {}))
+      "None of the required or optional parameters are specified"))
+  
+  (testing "pgsql-without-reqd-port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {:port 1334}))
+      "all the required keys are not specified (only port is specified)"))
+  
+  (testing "pgsql-without-reqd-host"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {:host "local"}))
+      "all the required keys are not specified (only host is specified)"))
+  
+  (testing "pgsql-without-reqd-database"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {:database "foo"}))
+      "all the required keys are not specified (only database is specified)"))
+  
+  (testing "pgsql-without-reqd-host and port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {:host "local"
+                               :port 2132}))
+      "all the required keys are not specified (only port and host are specified)"))
+  
+  (testing "pgsql-without-reqd-database & port"
+    (is (thrown? IllegalArgumentException
+          (jdbc-params :pgsql {:database "foo"
+                               :port 23890}))
       "all the required keys are not specified (only port and database are specified)")))
 
 
