@@ -1,15 +1,33 @@
 # cumulus
 
-A Clojure library to obtain JDBC connection parameters for popular databases.
+A Clojure library to obtain JDBC connection parameters for popular databases and JDBC drivers.
+
 
 ## Usage
 
+Leiningen coordinates: `[cumulus "0.1.0-SNAPSHOT"]`
+
+_Not on Clojars yet. Build locally and run `lein install`._
+
+
+### Quickstart
+
+```clojure
+(require '[cumulus.core :as c])
+
+;; MySQL connection params
+(c/jdbc-params :mysql {:host "localhost"
+                       :username "dbuser"
+                       :password "s3cr3t"})
+```
+
+
 ### Generic JDBC connections
 
-| `:adapter`     | Required keys            | Desired keys |
-|----------------|--------------------------|--------------|
-| `:jdbc`        | `:classname` `:jdbc-url` | `:val-query` |
-| `:subprotocol` | `:classname` `:subname`  | `:val-query` |
+| `:adapter`     | Required keys            | Desired keys  |
+|----------------|--------------------------|---------------|
+| `:jdbc`        | `:classname` `:jdbc-url` | `:test-query` |
+| `:subprotocol` | `:classname` `:subname`  | `:test-query` |
 
 
 ### ODBC connections (likely applicable for the Windows platform)
@@ -44,15 +62,16 @@ A Clojure library to obtain JDBC connection parameters for popular databases.
 
 ### Open Source drivers, network connections
 
-| Database          | `:adapter`        | Required keys       | Optional keys |
-|-------------------|-------------------|---------------------|---------------|
-| CUBRID            | `:cubrid`         | `:host` `:database` | `:port`       |
-| Firebird          | `:firebird`       | `:host` `:database` | `:port`       |
-| SQL Server (jTDS) | `:jtds-sqlserver` | `:host` `:database` | `:port`       |
-| Sybase (jTDS)     | `:jtds-sybase`    | `:host` `:database` | `:port`       |
-| MonetDB           | `:monetdb`        | `:host` `:database` | `:port`       |
-| MySQL             | `:mysql`          | `:host` `:database` | `:port`       |
-| PostgreSQL        | `:postgresql`     | `:host` `:database` | `:port`       |
+| Database             | `:adapter`        | Required keys       | Optional keys |
+|----------------------|-------------------|---------------------|---------------|
+| CUBRID               | `:cubrid`         | `:host` `:database` | `:port`       |
+| Firebird             | `:firebird`       | `:host` `:database` | `:port`       |
+| SQL Server (jTDS)    | `:jtds-sqlserver` | `:host` `:database` | `:port`       |
+| Sybase (jTDS)        | `:jtds-sybase`    | `:host` `:database` | `:port`       |
+| MonetDB              | `:monetdb`        | `:host` `:database` | `:port`       |
+| MySQL                | `:mysql`          | `:host` `:database` | `:port`       |
+| PostgreSQL (official)| `:postgresql`     | `:host` `:database` | `:port`       |
+| PostgreSQL (PgSQL)   | `:pgsql`          | `:host` `:database` | `:port`       |
 
 
 ### Proprietary Oracle drivers (`:adapter` = `:oracle`, default `:style` = `:system-id`)

@@ -1,23 +1,21 @@
 # Change Log
-All notable changes to this project will be documented in this file.
+Release notes and TODO items.
 
-## Released
+## 0.1.0 / 2016-July-??
 
-## Support for in-memory databases
+* Support for in-memory databases
   * Axion
   * Derby
   * H2
   * HSQLDB
   * SQLite
-  
-## Support for filesystem databases
+* Support for filesystem databases
   * Axion
   * Derby
   * H2
   * HSQLDB
   * SQLite
-  
-## Support for network databases
+* Support for network databases
   * Derby
   * H2
   * HSQLDB
@@ -28,6 +26,7 @@ All notable changes to this project will be documented in this file.
   * MonetDB	
   * MySQL	
   * PostgreSQL
+  * PgSQL (http://impossibl.github.io/pgjdbc-ng/)
   * Oracle
   * IBM DB2	
   * SapDB
