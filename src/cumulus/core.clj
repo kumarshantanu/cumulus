@@ -10,20 +10,21 @@
   :driver-class (fully qualified class name)
   :jdbc-url
   :test-query"
-  
-  [db-type db-params]
-  (when-let [key (get db-params :port)]
-    (i/type-check db-params :port))
-  
-  (when-let [key (get db-params :database)]
-    (i/type-check-string db-params :database))
-  
-  (when-let [key (get db-params :host)]
-    (i/type-check-string db-params :host))
-
+  ([db-params]
+    (jdbc-params (:adapter db-params) db-params))
+  ([db-type db-params]
+    (when-let [key (get db-params :port)]
+      (i/type-check db-params :port))
+    (when-let [key (get db-params :database)]
+      (i/type-check-string db-params :database))
+    (when-let [key (get db-params :host)]
+      (i/type-check-string db-params :host))
     (case db-type
       ;;embedded
+      :jdbc            (i/jdbc db-params)
+      :subprotocol     (i/subprotocol db-params)
       :odbc            (i/odbc db-params)
+      :odbc-lite       (i/odbc-lite db-params)
       :axiondb         (i/axiondb db-params)
       :derby           (i/derby db-params)
       :h2              (i/h2 db-params)
@@ -45,4 +46,4 @@
       :sqlserver       (i/sqlserver db-params)
       :sybase          (i/sybase db-params)
       (throw (IllegalArgumentException.
-               (format "Database/adapter type %s is not supported" db-type)))))
+               (format "Database/adapter type %s is not supported" db-type))))))
