@@ -142,17 +142,18 @@
 
 (defn derby
   [m]
-  (merge m (raw-params
-             "org.apache.derby.jdbc.EmbeddedDriver"
-             (let [target (:target m)]
-               (case target
-                 :memory   (format "jdbc:derby:memory:%s;create=true;"     (as-str (R m :database)))
-                 :filesys   (format "jdbc:derby:directory:%s;create=true;" (as-str (R m :database)))
-                 :classpath (format "jdbc:derby:classpath:%s"              (as-str (R m :database)))
-                 :jar       (format "jdbc:derby:jar:(%s)%s"                (as-str (R m :jar-path)) (as-str (R m :database)))
-                 :network   (format "jdbc:derby://%s%s/%s;create=true;"    (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
-                 (expected ":target to be :memory, :filesys, :classpath, :jar or :network" target)))
-             "values(1)")))
+  (merge m (let [target (:target m)
+                 ed (fn [url] (raw-params "org.apache.derby.jdbc.EmbeddedDriver" url "values(1)"))
+                 cd (fn [url] (raw-params "org.apache.derby.jdbc.ClientDriver"   url "values(1)"))]
+             (case target
+               :memory    (ed (format "jdbc:derby:memory:%s;create=true;"    (as-str (R m :database))))
+               :filesys   (ed (format "jdbc:derby:directory:%s;create=true;" (as-str (R m :database))))
+               :classpath (ed (format "jdbc:derby:classpath:%s"              (as-str (R m :database))))
+               :jar       (ed (format "jdbc:derby:jar:(%s)%s"                (as-str (R m :jar-path))
+                                (as-str (R m :database))))
+               :network   (cd (format "jdbc:derby://%s%s/%s;create=true;"    (as-str (R m :host))
+                                (Q m :port) (as-str (R m :database))))
+               (expected ":target to be :memory, :filesys, :classpath, :jar or :network" target)))))
 
 
 (defn h2
