@@ -104,7 +104,7 @@
 (defn subprotocol
   [m]
   (merge m (raw-params
-             (assert-as string? (R m :classname))
+             (assert-as string? ":classname as string" (R m :classname))
              (format "jdbc:%s:%s" (as-str (R m :subprotocol)) (as-str (R m :subname)))
              (if (not :test-query)
                nil
