@@ -45,7 +45,7 @@
 
 (defn parse-fn
   [db-params key]
-  (try 
+  (try
     (Integer/parseInt (get db-params key))
     (catch NumberFormatException _
       (throw (IllegalArgumentException.(format "Expected Integer string but found %s" (get db-params key)))))))
@@ -63,19 +63,19 @@
    :test-query test-query})
 
 
-(defn R 
+(defn R
   [m k]
   (reqd m k))
 
 
-(defn P 
+(defn P
   ([m k]
     (get m k))
   ([m k d]
     (get m k d)))
 
 
-(defn Q 
+(defn Q
   ([m k]
     (if-let [v (P m k)]
       (str ":" v)
@@ -121,7 +121,7 @@
                (get m :test-query)))))
 
 
-(defn odbc-lite 
+(defn odbc-lite
   [m]
   {:classname "sun.jdbc.odbc.JdbcOdbcDriver"
    :jdbc-url  (format "jdbc:odbc:%s" (as-str (R m :dsn)))
@@ -130,7 +130,7 @@
 
 (defn axiondb
   [m]
-  (merge m (raw-params 
+  (merge m (raw-params
              "org.axiondb.jdbc.AxionDriver"
              (let [target (:target m)]
                (case target
@@ -141,7 +141,7 @@
 
 (defn derby
   [m]
-  (merge m (raw-params 
+  (merge m (raw-params
              "org.apache.derby.jdbc.EmbeddedDriver"
              (let [target (:target m)]
                (case target
@@ -159,7 +159,7 @@
   (merge m (raw-params
              "org.h2.Driver"
              (let [target (:target m)]
-               (case target 
+               (case target
                  :memory  (format "jdbc:h2:mem:%s"             (as-str (R m :database)))
                  :filesys (format "jdbc:h2:file:%s"            (as-str (R m :database)))
                  :network (format "jdbc:h2:tcp:%s%s/%s"        (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
@@ -169,7 +169,7 @@
 
 (defn hsqldb
   [m]
-  (merge m (raw-params 
+  (merge m (raw-params
              "org.hsqldb.jdbcDriver"
              (let [target (:target m)]
                (case target
@@ -226,7 +226,7 @@
 
 (defn jtds-sybase
   [m]
-  (merge m (raw-params 
+  (merge m (raw-params
              "net.sourceforge.jtds.jdbc.Driver"
              (format "jdbc:jtds:sybase://%s%s%s"               (as-str (R m :host)) (Q m :port) (as-str (R m :database)))
              "select 1;")))
