@@ -5,9 +5,7 @@ A Clojure library to obtain JDBC connection parameters for popular databases and
 
 ## Usage
 
-Leiningen coordinates: `[cumulus "0.1.0-SNAPSHOT"]`
-
-_Not on Clojars yet. Build locally and run `lein install`._
+Leiningen coordinates: `[cumulus "0.1.0"]`
 
 
 ### Quickstart

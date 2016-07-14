@@ -1,7 +1,7 @@
 # Change Log
 Release notes and TODO items.
 
-## 0.1.0 / 2016-July-??
+## 0.1.0 / 2016-July-14
 
 * Support for in-memory database drivers (@NandhithaR)
   * Axion
