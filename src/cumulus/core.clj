@@ -11,7 +11,9 @@
   :jdbc-url
   :test-query"
   ([db-params]
-    (jdbc-params (:adapter db-params) db-params))
+    (if (and (contains? db-params :classname) (contains? db-params :jdbc-url))
+      db-params
+      (jdbc-params (:adapter db-params) db-params)))
   ([db-type db-params]
     (when-let [key (get db-params :port)]
       (i/type-check-int db-params :port))
