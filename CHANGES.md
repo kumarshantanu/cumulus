@@ -1,7 +1,7 @@
 # Change Log
 Release notes and TODO items.
 
-## 0.1.2 / 2016-July-??
+## 0.1.2 / 2016-July-14
 
 * Fix wrong driver classname in Derby network connections
 * Validate test query as either string or unspecified
