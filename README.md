@@ -75,6 +75,8 @@ _Not on Clojars yet. Build locally and run `lein install`._
 | PostgreSQL (official)| `:postgresql`     | `:host` `:database` | `:port`       |
 | PostgreSQL (PgSQL)   | `:pgsql`          | `:host` `:database` | `:port`       |
 
+PgSQL is an alternate OSS driver for PostgreSQL: http://impossibl.github.io/pgjdbc-ng/
+
 
 ### Proprietary Oracle drivers (`:adapter` = `:oracle`, default `:style` = `:system-id`)
 
