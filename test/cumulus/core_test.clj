@@ -160,7 +160,7 @@
             :jdbc-url
             "jdbc:derby://localhost/foo;create=true;",
             :classname
-            "org.apache.derby.jdbc.EmbeddedDriver",
+            "org.apache.derby.jdbc.ClientDriver",
             :host "localhost",
             :target :network,
             :database "foo"}
@@ -174,7 +174,7 @@
             :jdbc-url
             "jdbc:derby://local:3002/foo;create=true;",
             :classname
-            "org.apache.derby.jdbc.EmbeddedDriver",
+            "org.apache.derby.jdbc.ClientDriver",
             :host "local",
             :target :network,
             :database "foo",
