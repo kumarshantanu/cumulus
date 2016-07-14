@@ -1,4 +1,4 @@
-(defproject cumulus "0.1.1"
+(defproject cumulus "0.1.2-SNAPSHOT"
   :description "Obtain JDBC connection parameters for popular databases"
   :url "https://github.com/kumarshantanu/cumulus"
   :license {:name "Eclipse Public License"
