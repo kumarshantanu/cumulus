@@ -1,12 +1,14 @@
 # Change Log
 Release notes and TODO items.
 
-## 0.1.1 / 2016-July-??
+## 0.1.1 / 2016-July-14
 
-* Fix bad arity call
+* Fix bad arity call in `assert-as` (@NandhithaR)
 
 
 ## 0.1.0 / 2016-July-14
+
+Extracted from [clj-dbcp](https://github.com/kumarshantanu/clj-dbcp) version `0.8.1`:
 
 * Support for in-memory database drivers (@NandhithaR)
   * Axion
