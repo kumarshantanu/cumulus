@@ -91,14 +91,19 @@
   x)
 
 
+(defn assert-maybe
+  "Assert the validity of x only if it is truthy, returning x on success or throw IllegalArgumentException on failure."
+  [f description x]
+  (when x
+    (assert-as f description x)))
+
+
 (defn jdbc
   [m]
   (merge m (raw-params
              (assert-as string? ":classname as string" (R m :classname))
              (assert-as string? ":classname as string" (R m :jdbc-url))
-             (if (not :test-query)
-               nil
-               (get m :test-query)))))
+             (assert-maybe string? ":test-query to be string or nil" (get m :test-query)))))
 
 
 (defn subprotocol
@@ -106,9 +111,7 @@
   (merge m (raw-params
              (assert-as string? ":classname as string" (R m :classname))
              (format "jdbc:%s:%s" (as-str (R m :subprotocol)) (as-str (R m :subname)))
-             (if (not :test-query)
-               nil
-               (get m :test-query)))))
+             (assert-maybe string? ":test-query to be string or nil" (get m :test-query)))))
 
 
 (defn odbc
@@ -116,9 +119,7 @@
   (merge m (raw-params
              "sun.jdbc.odbc.JdbcOdbcDriver"
              (format "jdbc:odbc:%s" (as-str (R m :dsn)))
-             (if (not :test-query)
-               nil
-               (get m :test-query)))))
+             (assert-maybe string? ":test-query to be string or nil" (get m :test-query)))))
 
 
 (defn odbc-lite
