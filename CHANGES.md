@@ -1,11 +1,34 @@
 # Change Log
-All notable changes to this project will be documented in this file.
+Release notes and TODO items.
 
-## [Unreleased]
+## 0.1.0 / 2016-July-??
 
-- [TODO] Support for in-memory databases
-  - [TODO] List the names
-- [TODO] Support for filesystem databases
-  - [TODO] List the names
-- [TODO] Support for network databases
-  - [TODO] List the names
+* Support for in-memory databases
+  * Axion
+  * Derby
+  * H2
+  * HSQLDB
+  * SQLite
+* Support for filesystem databases
+  * Axion
+  * Derby
+  * H2
+  * HSQLDB
+  * SQLite
+* Support for network databases
+  * Derby
+  * H2
+  * HSQLDB
+  * CUBRID
+  * Firebird
+  * SQL Server (jTDS)
+  * Sybase (jTDS)	
+  * MonetDB	
+  * MySQL	
+  * PostgreSQL
+  * PgSQL (http://impossibl.github.io/pgjdbc-ng/)
+  * Oracle
+  * IBM DB2	
+  * SapDB
+  * SQL Server
+  * Sybase
