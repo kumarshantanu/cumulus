@@ -1,6 +1,12 @@
 # Change Log
 Release notes and TODO items.
 
+## 0.1.2 / 2016-July-??
+
+* Validate test query as either string or unspecified
+* Infer adapter name for implicit types
+
+
 ## 0.1.1 / 2016-July-14
 
 * Fix bad arity call in `assert-as` (@NandhithaR)

@@ -11,9 +11,16 @@
   :jdbc-url
   :test-query"
   ([db-params]
-    (if (and (contains? db-params :classname) (contains? db-params :jdbc-url))
-      db-params
-      (jdbc-params (:adapter db-params) db-params)))
+    (as-> db-params $
+      (update-in $ [:adapter] (fn [adapter]
+                                (if (nil? adapter)
+                                  (cond
+                                    (and (contains? $ :classname)
+                                      (contains? $ :jdbc-url))    :jdbc
+                                    (contains? $ :subprotocol)    :subprotocol
+                                    :otherwise                    nil)
+                                  adapter)))
+      (jdbc-params (:adapter $) $)))
   ([db-type db-params]
     (when-let [key (get db-params :port)]
       (i/type-check-int db-params :port))
@@ -23,6 +30,7 @@
       (i/type-check-string db-params :host))
     (case db-type
       ;;embedded
+      nil              (i/jdbc db-params)
       :jdbc            (i/jdbc db-params)
       :subprotocol     (i/subprotocol db-params)
       :odbc            (i/odbc db-params)
